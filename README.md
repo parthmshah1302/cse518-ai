@@ -11,4 +11,5 @@
 |EndSem   |35%   |
 ## Links
 ### [Course Website](https://shashi-prabh.github.io/teaching/ai_2022.html)
+### [Berkeley Website](https://inst.eecs.berkeley.edu/~cs188/sp22/)
 ### [PacMan Assignments](https://inst.eecs.berkeley.edu/~cs188/sp22/projects/)
