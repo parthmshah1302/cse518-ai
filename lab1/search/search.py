@@ -95,7 +95,7 @@ def depthFirstSearch(problem: SearchProblem):
     # if problem.GOAL - TEST(node.S TATE) then return S OLUTION(node)
     if problem.isGoalState(node['state']):
         return []
-    # frontier ← a FIFO stack with node as the only element
+    # frontier ← a LIFO stack with node as the only element
     frontier = util.Stack()
     frontier.push(node)
     # explored ← an empty set
