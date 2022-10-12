@@ -185,29 +185,43 @@ def uniformCostSearch(problem: SearchProblem):
     # print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     # print("Start's successors:", problem.getSuccessors(problem.getStartState()))
 
+    from util import PriorityQueue
 
-    # node ← a node with S TATE = problem.I NITIAL - S TATE, P ATH - C OST = 0
-    node = {'state': problem.getStartState(), 'cost': 0}
-    # frontier ← a priority queue ordered by P ATH - C OST, with node as the only element
-    frontier=util.PriorityQueue()
-    # explored ← an empty set
-    explored=[]
-    # loop do
-    while(True):
-    #     if E MPTY ?(frontier) then return failure
-        if frontier.isEmpty():
-            raise Exception("Search failed -> frontier is empty")
-    #     node ← P OP(frontier) / * chooses the lowest-cost node in frontier * /
-        node=frontier.pop()
-    #     if problem.G OAL - T EST(node.S TATE) then return S OLUTION(node)
-        
-    #     add node.S TATE to explored
-    #     for each action in problem.A CTIONS(node.S TATE) do
-    #         child ← C HILD - N ODE(problem, node, action)
-    #         if child .S TATE is not in explored or frontier then
-    #             frontier ← I NSERT(child, frontier)
-    #         else if child .S TATE is in frontier with higher P ATH - C OST then
-    #             replace that frontier node with child
+    # Declare required variables
+    actions = []
+    visited = []
+    priorityQueue = PriorityQueue()
+
+    # Initial State
+    """
+        There are 2 parameters to priority queue viz data and priority where data represents the data for which
+        priority needs to be decided and priority is self explanatory
+
+        For data, list is passed containing current state (initially only starting state), list of actions to
+        reach that state and its cost
+    """
+    priorityQueue.push((problem.getStartState(), [], 0), 1)
+
+    # UCS
+    while not priorityQueue.isEmpty():
+        currentState, actions, prevCost = priorityQueue.pop()
+
+        visited.append(currentState)
+
+        if(problem.isGoalState(currentState)):
+            # search is completed
+            break
+
+        for child in problem.getSuccessors(currentState):
+            if child[0] not in visited:
+                if(len(actions) == 0):
+                    actionsForParticularState = [child[1]]
+                else:
+                    actionsForParticularState = actions + [child[1]]
+                cost = prevCost + child[2]
+                priorityQueue.push(
+                    (child[0], actionsForParticularState, cost), cost)
+    return actions
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -220,6 +234,47 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    # Import required libraries
+    from util import PriorityQueue
+
+    # Declare required variables
+    actions = []
+    visited = []
+    priorityQueue = PriorityQueue()
+
+    # Initial State
+    """
+        There are 2 parameters to priority queue viz data and priority where data represents the data for which
+        priority needs to be decided and priority is self explanatory
+
+        For data, list is passed containing current state (initially only starting state), list of actions to
+        reach that state and its cost
+    """
+    priorityQueue.push((problem.getStartState(), [], 0), 1)
+
+    # astarsearch
+    while not priorityQueue.isEmpty():
+        currentState, actions, prevCost = priorityQueue.pop()
+
+        visited.append(currentState)
+
+        if(problem.isGoalState(currentState)):
+            # search is completed
+            break
+
+        for child in problem.getSuccessors(currentState):
+            if child[0] not in visited:
+                if(len(actions) == 0):
+                    actionsForParticularState = [child[1]]
+                else:
+                    actionsForParticularState = actions + [child[1]]
+                # cost of path from start state to child state
+                cost = prevCost + child[2]
+                # add heuristic cost of only the child state
+                heuristicCost = cost + heuristic(child[0], problem)
+                priorityQueue.push(
+                    (child[0], actionsForParticularState, heuristicCost), heuristicCost)
+    return actions
     util.raiseNotDefined()
 
 
